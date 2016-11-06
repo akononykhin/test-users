@@ -1,0 +1,42 @@
+version: "2"
+
+networks:
+  back-tier:
+    driver: bridge
+  front-tier:
+    driver: bridge
+
+services:
+
+  redis:
+    hostname: redis
+    image: redis:3-alpine
+    expose:
+      - 6379
+    networks:
+      - back-tier
+
+  api:
+    build: ./
+    command: npm run start
+    environment:
+      PORT: 3000
+      MYSQL_HOST: "192.168.99.1"
+      MYSQL_USER: "odesk"
+      MYSQL_PASSWORD: "odesk"
+      MYSQL_DATABASE: "odesk"
+      REDIS_HOST: "redis"
+    mem_limit: 512m
+    expose:
+      - 3000
+    ports:
+      - "3331:3000"
+    networks:
+      - front-tier
+      - back-tier
+    logging:
+      options:
+        max-size: "1m"
+        max-file: "2"
+    links:
+      - redis
