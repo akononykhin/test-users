@@ -23,13 +23,17 @@
   "dependencies": {
     "amqplib": "^0.4.2",
     "bookshelf": "^0.10.2",
+    "bookshelf-uuid": "~1.0.0",
     "bunyan": "^1.8.4",
     "debug": "^2.2.0",
     "dotenv": "^2.0.0",
     "knex": "^0.12.6",
-    "mysql": "^2.11.1",
+    "mysql": "~2.12.0",
     "pm2": "^2.0.19",
     "redis": "^2.6.2",
-    "restify": "^4.2.0"
+    "restify": "^4.2.0",
+    "moment": "~2.15.2",
+    "crypto": "0.0.3",
+    "uuid": "~2.0.3"
   }
 }
