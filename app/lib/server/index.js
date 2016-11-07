@@ -7,9 +7,9 @@ const serverConfig = {
     version: process.env.APP_VERSION,
     log: log,
     formatters: {
-        'application/json': formatJSON,
-        'application/javascript': formatJSONP,
-        'application/jsonp': formatJSONP
+        'application/json': customFormatJSON,
+        'application/javascript': customFormatJSONP,
+        'application/jsonp': customFormatJSONP
     }
 };
 
@@ -50,7 +50,7 @@ function onListening() {
     log.info(`Listening on port ${process.env.PORT}`);
 }
 
-function formatJSON(req, res, body, cb) {
+function customFormatJSON(req, res, body, cb) {
     if (body instanceof Error) {
         // snoop for RestError or HttpError, but don't rely on
         // instanceof
@@ -78,7 +78,7 @@ function formatJSON(req, res, body, cb) {
     return cb(null, data);
 }
 
-function formatJSONP(req, res, body, cb) {
+function customFormatJSONP(req, res, body, cb) {
     if (!body) {
         res.setHeader('Content-Length', 0);
         return (null);
