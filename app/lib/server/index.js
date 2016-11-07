@@ -51,26 +51,43 @@ function onListening() {
 }
 
 function customFormatJSON(req, res, body, cb) {
+    var data = {};
+    var meta = undefined;
     if (body instanceof Error) {
         // snoop for RestError or HttpError, but don't rely on
         // instanceof
         res.statusCode = body.statusCode || 500;
 
         if (body.body) {
-            body = body.body;
+            data = body.body;
         } else {
-            body = {
+            data = {
                 message: body.message
             };
         }
-    } else if (Buffer.isBuffer(body)) {
-        body = body.toString('base64');
+    } else {
+        if (Buffer.isBuffer(body)) {
+            body = body.toString('base64');
+        }
+        if(body.data) {
+            data = body.data;
+        }
+        else {
+            data = body;
+        }
+
+        if(body.headers) {
+            meta = body.headers;
+        }
     }
 
     var envelopedBody = {
         status: res.statusCode,
-        data: body
+        data: data
     };
+    if(meta) {
+        envelopedBody.meta = meta;
+    }
 
     var data = JSON.stringify(envelopedBody);
     res.setHeader('Content-Length', Buffer.byteLength(data));
@@ -84,25 +101,39 @@ function customFormatJSONP(req, res, body, cb) {
         return (null);
     }
 
+    var data = {};
+    var meta = undefined;
     if (body instanceof Error) {
         if ((body.restCode || body.httpCode) && body.body) {
-            body = body.body;
+            data = body.body;
         } else {
-            body = {
+            data = {
                 message: body.message
             };
         }
-    }
+    } else {
+        if (Buffer.isBuffer(body)) {
+            body = body.toString('base64');
+        }
+        if(body.data) {
+            data = body.data;
+        }
+        else {
+            data = body;
+        }
 
-    if (Buffer.isBuffer(body)) {
-        body = body.toString('base64');
+        if(body.headers) {
+            meta = body.headers;
+        }
     }
-
 
     var envelopedBody = {
         status: res.statusCode,
-        data: body
+        data: data
     };
+    if(meta) {
+        envelopedBody.meta = meta;
+    }
 
     var _cb = req.query.callback || req.query.jsonp;
     var data;

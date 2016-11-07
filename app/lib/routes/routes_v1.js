@@ -1,29 +1,18 @@
-const books = require('./../middleware/books-middleware');
+const restify = require('restify');
+const users = require('./../middleware/users-middleware');
 
 module.exports = function(server) {
-
-/*
-    server.get('/',
-        books.getBooks,
-        (req, res, next) => {
+    server.get('/v1/users/:id', function(req, res, next) {
+        users.findById(req.params.id)
+        .then(function(user) {
+            req.log.info("User fetched. id="+user.id);
             res.send({
-                status: 200,
-                data: res.data
+                data: user
             });
-            // return next();
+        })
+        .catch(function(error) {
+            return next(new restify.ResourceNotFoundError(""));
         });
-*/
-
-    server.get({path: '/v1', name: 'v1_root'}, function(req, res, next) {
-        req.log.info('V1 test request');
-        res.send({id: 1, name: 'v1_root'});
-        return next();
-    });
-
-    server.get({path: '/v1/ttt', name: 'v1_ttt'}, function(req, res, next) {
-        req.log.info('V1 ttt request');
-        res.send();
-        return next();
     });
 };
 
