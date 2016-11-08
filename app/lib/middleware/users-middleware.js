@@ -72,7 +72,6 @@ function findByEmail(email) {
 
 function fetchAll(req) {
     return new Promise(function(resolve, reject) {
-/*
         log.info("fetchAll started");
         var model = new User();
         if(req.params.email) {
@@ -101,9 +100,10 @@ function fetchAll(req) {
             log.error("Error DB: " + error);
             reject(error);
         });
-*/
-    User.fetchAll().then((users) => {
+/*
+    User.query().fetchPage({oageSize:10,page:2}).then((users) => {
         resolve(users);
     });
+*/
     });
 };
