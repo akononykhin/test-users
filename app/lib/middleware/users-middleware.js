@@ -13,7 +13,8 @@ const redisEmailKeyPrefix = 'users:email:';
 // Contents ===================
 module.exports = {
     findById,
-    findByEmail
+    findByEmail,
+    fetchAll
 };
 
 function findById(id) {
@@ -68,3 +69,41 @@ function findByEmail(email) {
 };
 
 
+
+function fetchAll(req) {
+    return new Promise(function(resolve, reject) {
+/*
+        log.info("fetchAll started");
+        var model = new User();
+        if(req.params.email) {
+            model = model.where({email: req.params.email});
+        }
+        if(req.params.sort) {
+            var sorts = req.params.sort.split(',');
+            sorts.forEach(function(sort) {
+                model = model.orderBy(sort);
+            });
+        }
+        var page = parseInt(req.params.page, 10);
+        var perPage = parseInt(req.params.per_page, 10);
+        if(!page || 1 > page) {
+            page = 1;
+        }
+        if(!perPage || 100 < perPage) {
+            perPage = 50;
+        }
+
+        log.info("Before DB request");
+        model.fetchPage({page: page, pageSize: perPage}).then(function(results) {
+            resolve(results);
+        })
+        .catch(function(error) {
+            log.error("Error DB: " + error);
+            reject(error);
+        });
+*/
+    User.fetchAll().then((users) => {
+        resolve(users);
+    });
+    });
+};
